@@ -1,0 +1,10 @@
+{
+  "version": "2",
+  "plugins": [
+    {
+      "id": "mattpocock-skills",
+      "displayName": "Matt Pocock's Skills",
+      "source": "https://github.com/GoooIce/skills"
+    }
+  ]
+}

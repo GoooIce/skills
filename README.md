@@ -46,6 +46,28 @@ It's in Claude Code's official marketplace, so there's nothing to add first, and
 </details>
 
 <details>
+<summary><strong>Kimi Code</strong></summary>
+
+Install directly from GitHub:
+
+```
+/plugins install https://github.com/GoooIce/skills
+```
+
+Or add this repo as a custom marketplace:
+
+```
+/plugins marketplace https://raw.githubusercontent.com/GoooIce/skills/main/.kimi-plugin/marketplace.json
+```
+
+Then install `mattpocock-skills` from the Third-party tab.
+
+> [!NOTE]
+> As of Kimi Code 0.31.1, skills marked for manual invocation only (`disable-model-invocation: true`) are not loaded by the plugin system. The **model-invoked** skills below work immediately; the **user-invoked** skills will become available once Kimi resolves this.
+
+</details>
+
+<details>
 <summary><strong>Codex, and other agents</strong></summary>
 
 ```bash

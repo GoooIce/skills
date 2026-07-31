@@ -14,18 +14,21 @@ Skills live in bucket folders under `skills/`: `engineering/` and `productivity/
   - Pointing at `./skills/` would also ship `deprecated/`, `in-progress/`, `personal/`, and `misc/`: retired, draft, and personal skills we deliberately don't promote.
   - A curated flat directory of **symlinks** into the buckets does not survive install: Codex copies the plugin tree into its cache and **drops symlinks**, so the skills arrive empty.
 
+- **Kimi Code**: `.kimi-plugin/plugin.json` accepts `skills` as an **array of explicit skill-directory paths**, just like Claude Code. We can therefore ship a native Kimi plugin curated to the promoted set with the same path list, plus `.kimi-plugin/marketplace.json` for custom-marketplace installs. One caveat: Kimi Code 0.31.1 does not load skills whose frontmatter contains `disable-model-invocation: true`; the model-invoked skills load immediately, while the user-invoked skills will become available once Kimi resolves this.
+
 The only robust ways to give Codex a single promoted-only path are (a) **restructure** so `skills/` contains only promoted skills (moving the non-promoted buckets out, a large blast radius across `CLAUDE.md`, `scripts/link-skills.sh`, the bucket READMEs, and the local dev workflow that relies on `in-progress/` and `personal/`), or (b) **commit duplicate copies** of promoted skills into a flat directory (a sync burden and a second source of truth). Both are structural decisions, not something to bundle into shipping the Claude plugin. This is very likely the original, half-remembered reason a plugin wasn't shipped earlier: the manifest formats didn't cleanly express a curated subset of a bucketed repo.
 
 ## Decision
 
 - Ship the **Claude Code plugin** now (`.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`), curated to the promoted set, as the headline v1.2 deliverable.
+- Also ship a **Kimi Code plugin** (`.kimi-plugin/plugin.json` + `.kimi-plugin/marketplace.json`), curated the same way. Kimi supports the same array-of-paths manifest shape as Claude, so no structural trade-off is needed.
 - Keep **skills.sh** as the universal installer: it already serves Codex and other harnesses today, so no Codex user is left without an install path.
 - **Defer** the native Codex plugin until we decide between restructuring `skills/` to promoted-only vs. committing a generated flat copy. Revisit when Codex either supports a `skills` array / include-list or preserves symlinks on install.
 
 ## Invariants this creates
 
-- Every promoted skill has an entry in `.claude-plugin/plugin.json`'s `skills` array (this already stood as a `CLAUDE.md` rule; it now also gates the plugin's contents).
-- `.claude-plugin/plugin.json`'s `version` tracks `package.json`'s version: bump both together on release. Claude uses the plugin `version` to decide when installed users see an update.
+- Every promoted skill has an entry in `.claude-plugin/plugin.json`'s `skills` array and in `.kimi-plugin/plugin.json`'s `skills` array (this already stood as a `CLAUDE.md` rule; it now also gates both plugins' contents).
+- `.claude-plugin/plugin.json`'s `version` and `.kimi-plugin/plugin.json`'s `version` track `package.json`'s version: bump all together on release. Each plugin uses its manifest `version` to decide when installed users see an update.
 
 ## Update, 2026-08-05
 
